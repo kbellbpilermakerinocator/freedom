@@ -19,11 +19,24 @@ body{background:var(--sky-top);color:var(--ink);font-family:var(--body);overflow
 .sky{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
   padding-block:1.5rem 2.5rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   background:radial-gradient(ellipse at 50% 35%,var(--sky-mid) 0,var(--sky-top) 70%);text-align:center}
-#art{display:none}
-#bird{animation:bob 4.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
-.flag{animation:drift 7s ease-in-out infinite alternate}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-@keyframes drift{from{transform:translateX(-14px)}to{transform:translateX(14px)}}
+
+/* Screeching eagle */
+.eagle{position:relative;width:min(440px,90vw);cursor:pointer;-webkit-tap-highlight-color:transparent;border:0;background:none;padding:0;color:inherit}
+.eagle svg{width:100%;height:auto;display:block;overflow:visible}
+#head{transform-box:view-box;transform-origin:120px 290px;animation:lunge 2.4s ease-in-out infinite}
+#jaw{transform-box:view-box;transform-origin:292px 168px;animation:jaw 2.4s ease-in-out infinite}
+.wave{fill:none;stroke:var(--orange);stroke-width:7;stroke-linecap:round;opacity:0;transform-box:view-box;transform-origin:360px 170px;animation:wave 2.4s ease-out infinite}
+.wave:nth-of-type(2){animation-delay:.15s}
+.wave:nth-of-type(3){animation-delay:.3s}
+.skree{font-family:var(--display);fill:var(--ink);paint-order:stroke;stroke:var(--orange);stroke-width:6px;letter-spacing:2px;
+  transform-box:fill-box;transform-origin:center;animation:pop 2.4s ease-out infinite}
+@keyframes lunge{0%,15%,100%{transform:rotate(0)}30%,60%{transform:rotate(-4deg) translateX(6px)}35%,45%,55%{transform:rotate(-3deg) translateX(4px)}40%,50%{transform:rotate(-5deg) translateX(7px)}}
+@keyframes jaw{0%,15%,80%,100%{transform:rotate(-14deg)}30%,62%{transform:rotate(14deg)}}
+@keyframes wave{0%,25%{opacity:0;transform:scale(.6)}35%{opacity:1}70%,100%{opacity:0;transform:scale(1.5)}}
+@keyframes pop{0%,25%{opacity:0;transform:scale(.4) rotate(-6deg)}35%{opacity:1;transform:scale(1.1) rotate(-6deg)}62%{opacity:1;transform:scale(1) rotate(-4deg)}75%,100%{opacity:0;transform:scale(1) rotate(-4deg)}}
+.eagle.go #head,.eagle.go #jaw,.eagle.go .wave,.eagle.go .skree{animation-duration:1.2s;animation-iteration-count:1}
+.hint{font-size:.95rem;letter-spacing:.25em;text-transform:uppercase;color:var(--dim);margin-top:-.4rem}
+
 h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;margin:0;letter-spacing:.02em;text-wrap:balance;
   color:var(--ink);text-shadow:0 4px 0 var(--orange),0 0 40px rgba(255,106,0,.5)}
 .clock{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(.6rem,3vw,2rem)}
@@ -32,54 +45,72 @@ h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;m
 .lbl{font-size:.9rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
 .until{font-size:1.15rem;color:var(--dim)}
 .done .num{color:var(--ink)}
-@media (prefers-reduced-motion:reduce){#bird,.flag{animation:none}}
+@media (prefers-reduced-motion:reduce){#head,#jaw,.wave,.skree{animation:none}.skree{opacity:1}#jaw{transform:rotate(14deg)}}
 </style>
 </head>
 <body>
 <div class="sky">
-<svg id="art" viewBox="0 0 700 520" role="img" aria-label="Wedge-tailed eagle swooping with talons out through an Australian flag swoosh">
-  <defs>
-    <radialGradient id="sunG"><stop offset="0" stop-color="#ffb35c"/><stop offset=".45" stop-color="#ff6a00" stop-opacity=".75"/><stop offset="1" stop-color="#ff6a00" stop-opacity="0"/></radialGradient>
-    <radialGradient id="bodyG" cx=".4" cy=".25" r=".9"><stop offset="0" stop-color="#7a4a22"/><stop offset=".45" stop-color="#3a200e"/><stop offset="1" stop-color="#1c0e05"/></radialGradient>
-    <linearGradient id="flightG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a1508"/><stop offset=".6" stop-color="#4a2a14"/><stop offset="1" stop-color="#160a03"/></linearGradient>
-    <linearGradient id="trouserG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5c3418"/><stop offset="1" stop-color="#a06a34"/></linearGradient>
-    <filter id="soft" x="-10%" y="-20%" width="120%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>
-    <filter id="rim"><feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff8a2a" flood-opacity=".8"/></filter>
-  </defs>
-  <circle cx="350" cy="250" r="250" fill="url(#sunG)"/>
-  <g class="flag">
-    <g filter="url(#soft)" opacity=".9">
-      <path fill="#c8102e" d="M-60,110 C150,40 300,190 450,120 C560,70 650,100 760,80 L760,165 C650,185 560,155 450,205 C300,275 150,130 -60,195 Z"/>
-      <path fill="#f4efe8" d="M-60,195 C150,130 300,275 450,205 C560,155 650,185 760,165 L760,225 C650,245 560,220 450,265 C300,335 150,200 -60,255 Z"/>
-      <path fill="#012169" d="M-60,255 C150,200 300,335 450,265 C560,220 650,245 760,225 L760,330 C650,350 560,320 450,370 C300,430 150,310 -60,360 Z"/>
-    </g>
-    <g id="stars" fill="#fff"></g>
-  </g>
-  <g id="bird" filter="url(#rim)">
-    <g id="tail"></g>
-    <g transform="translate(322,205) scale(-0.95,0.95)"><g>
-      <animateTransform attributeName="transform" type="rotate" values="-16 0 0;10 0 0;-16 0 0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="2.6s" repeatCount="indefinite"/>
-      <g class="wing"></g></g></g>
-    <g transform="translate(378,205) scale(0.95)"><g>
-      <animateTransform attributeName="transform" type="rotate" values="-16 0 0;10 0 0;-16 0 0" keyTimes="0;.5;1" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="2.6s" repeatCount="indefinite"/>
-      <g class="wing"></g></g></g>
-    <g id="legs"></g>
-    <path fill="url(#bodyG)" d="M306,196 C282,240 290,312 325,342 L375,342 C410,312 418,240 394,196 Z"/>
-    <g transform="translate(456,40) scale(-0.4,0.4)">
-      <path fill="#2a160a" d="M150,148 C175,105 230,85 285,100 C330,112 350,160 345,210 C342,270 365,330 390,400 L150,400 C160,340 175,290 160,240 C155,225 150,215 148,205 Z"/>
-      <path fill="#c47a2c" d="M232,90 C292,88 340,128 346,200 C334,176 306,158 268,152 C258,130 248,108 232,90 Z"/>
-      <path fill="#8a4f1c" d="M262,150 C300,158 330,180 345,212 C346,240 352,262 360,290 C340,250 310,215 268,190 Z"/>
-      <g fill="none" stroke="#e0a050" stroke-width="3" stroke-linecap="round" opacity=".8"><path d="M260,110 q30,8 48,30"/><path d="M278,128 q28,10 44,34"/><path d="M250,98 q30,4 52,20"/></g>
-      <path fill="#e8d9b8" d="M148,150 C110,150 80,175 65,210 C62,222 66,232 74,236 C76,226 82,220 92,218 C110,214 130,210 152,206 Z"/>
-      <path fill="#1a0d05" d="M65,210 C62,222 66,232 74,236 C76,226 80,221 87,219 C79,214 71,212 65,210 Z"/>
-      <path fill="none" stroke="#6b4a2a" stroke-width="2" d="M92,218 C115,212 135,209 156,207"/>
-      <path fill="#f2c94c" d="M140,148 C155,140 170,148 172,165 C170,185 168,200 160,214 L148,206 C152,190 152,165 140,148 Z"/>
-      <circle cx="212" cy="166" r="13" fill="#c9871f"/><circle cx="210" cy="166" r="7" fill="#0d0603"/><circle cx="207" cy="162" r="2.5" fill="#fff3e6"/>
-      <path fill="#1a0d05" d="M172,152 C198,136 232,136 254,152 C232,150 205,154 184,166 Z"/>
-    </g>
-    <g id="chest"></g>
-  </g>
-</svg>
+  <button class="eagle" id="eagle" type="button" aria-label="Wedge-tailed eagle screeching. Tap to hear the freedom screech">
+    <svg viewBox="0 0 480 320" aria-hidden="true">
+      <defs>
+        <radialGradient id="glow"><stop offset="0" stop-color="#ffb35c"/><stop offset=".5" stop-color="#ff6a00" stop-opacity=".55"/><stop offset="1" stop-color="#ff6a00" stop-opacity="0"/></radialGradient>
+        <linearGradient id="plume" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a2a12"/><stop offset=".6" stop-color="#2a1608"/><stop offset="1" stop-color="#140904"/></linearGradient>
+        <linearGradient id="nape" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a4f1c"/><stop offset=".55" stop-color="#d89038"/><stop offset="1" stop-color="#f0b860"/></linearGradient>
+        <linearGradient id="beak" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3e6c8"/><stop offset=".7" stop-color="#cdbb94"/><stop offset="1" stop-color="#3a2a1a"/></linearGradient>
+        <filter id="rim"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#ff8a2a" flood-opacity=".7"/></filter>
+      </defs>
+      <circle cx="190" cy="170" r="170" fill="url(#glow)"/>
+
+      <!-- sound waves -->
+      <path class="wave" d="M372,128 q22,42 0,84"/>
+      <path class="wave" d="M396,108 q34,62 0,124"/>
+      <path class="wave" d="M420,88 q46,82 0,164"/>
+
+      <g id="head" filter="url(#rim)">
+        <!-- neck and head mass with bristling hackles -->
+        <path fill="url(#plume)" d="M40,320 C34,262 50,206 86,164 L72,150 L98,148 L90,128 L114,134 L114,110 L136,122 L144,98 L160,114 L176,92 L186,110 C214,88 256,86 282,104 C296,114 304,128 306,146 L296,170 C292,196 280,214 262,226 C250,262 246,292 250,320 Z"/>
+        <!-- golden nape -->
+        <path fill="url(#nape)" d="M118,128 L136,122 L144,98 L160,114 L176,92 L186,110 C214,92 248,90 270,104 C244,104 218,114 196,132 C178,146 166,166 160,188 C148,168 134,148 118,128 Z"/>
+        <g fill="none" stroke="#f6c870" stroke-width="2.5" stroke-linecap="round" opacity=".75">
+          <path d="M170,118 q24,-8 44,-6"/><path d="M160,136 q26,-12 50,-10"/><path d="M156,156 q20,-14 40,-16"/>
+        </g>
+        <!-- chest feather scallops -->
+        <g fill="none" stroke="#6a3e1c" stroke-width="2.5" opacity=".7">
+          <path d="M120,250 q12,14 24,0"/><path d="M150,262 q12,14 24,0"/><path d="M180,250 q12,14 24,0"/>
+          <path d="M106,280 q12,14 24,0"/><path d="M136,292 q12,14 24,0"/><path d="M166,282 q12,14 24,0"/><path d="M196,272 q12,14 24,0"/>
+        </g>
+
+        <!-- open mouth interior -->
+        <path fill="#5a0e0e" d="M292,150 C316,150 340,156 360,166 L356,186 C334,196 310,196 292,186 Z"/>
+        <path fill="#c43a3a" d="M300,170 C318,170 334,174 346,180 C334,188 314,188 302,182 Z"/>
+
+        <!-- lower mandible, hinged so it drops open -->
+        <g id="jaw">
+          <path fill="url(#beak)" d="M290,166 C314,172 338,180 356,182 C356,192 346,200 330,200 C310,200 294,192 286,180 Z"/>
+          <path fill="none" stroke="#7a6446" stroke-width="2" d="M292,172 C312,178 332,184 350,186"/>
+        </g>
+
+        <!-- upper mandible with hooked tip -->
+        <path fill="url(#beak)" d="M282,124 C312,114 346,120 366,142 C376,154 376,172 362,182 C364,170 358,160 346,156 C328,150 306,150 288,156 Z"/>
+        <path fill="#1c120a" d="M362,182 C374,172 376,154 366,142 C372,156 372,170 362,182 Z"/>
+        <path fill="none" stroke="#9a8460" stroke-width="2" d="M292,150 C312,146 334,148 350,156"/>
+        <!-- cere and nostril -->
+        <path fill="#e8d6a0" d="M278,120 C290,116 302,118 308,126 C300,136 292,148 286,160 C280,148 278,134 278,120 Z"/>
+        <ellipse cx="296" cy="130" rx="5" ry="3" fill="#2a1a0c" transform="rotate(-20 296 130)"/>
+
+        <!-- fierce eye with heavy brow -->
+        <circle cx="252" cy="134" r="13" fill="#d9921f"/>
+        <circle cx="255" cy="134" r="7" fill="#0d0603"/>
+        <circle cx="258" cy="130" r="2.6" fill="#fff3e6"/>
+        <path fill="#140904" d="M222,124 C238,108 266,108 286,120 C268,118 252,120 238,132 C232,128 226,126 222,124 Z"/>
+        <path fill="none" stroke="#140904" stroke-width="3" d="M240,148 q12,4 24,-2"/>
+      </g>
+
+      <text class="skree" x="372" y="64" font-size="46" text-anchor="middle">SKREEE!</text>
+    </svg>
+  </button>
+  <div class="hint">Tap the eagle</div>
+
   <h1>Month of Freedom</h1>
   <div class="clock" id="clock">
     <div class="unit"><span class="num" id="d">0</span><span class="lbl">Days</span></div>
@@ -90,37 +121,40 @@ h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;m
   <div class="until" id="until">Freedom starts tonight at 7:00 pm Perth time</div>
 </div>
 <script>
-const NS='http://www.w3.org/2000/svg';
-const el=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent&&parent.appendChild(e);return e};
-function feather(g,bx,by,deg,len,w,fill,edge){
-  const a=deg*Math.PI/180,c=Math.cos(a),s=Math.sin(a);
-  const tx=bx+c*len,ty=by+s*len,mx=bx+c*len*.5,my=by+s*len*.5,px=-s*w,py=c*w;
-  el('path',{d:`M${bx},${by} Q${mx+px},${my+py} ${tx},${ty} Q${mx-px},${my-py} ${bx},${by}Z`,fill,stroke:edge,'stroke-width':1.4},g);
-  el('path',{d:`M${bx},${by} L${bx+c*len*.85},${by+s*len*.85}`,stroke:'#0e0602','stroke-width':1,opacity:.6},g);
+// Synthesised raptor screech: a falling, warbling cry with a raspy edge. No audio file needed.
+let ctx;
+function screech(){
+  try{
+    ctx = ctx || new (window.AudioContext||window.webkitAudioContext)();
+    if(ctx.state==='suspended') ctx.resume();
+    const t=ctx.currentTime, dur=1.3;
+    const out=ctx.createGain();
+    out.gain.setValueAtTime(0.0001,t);
+    out.gain.exponentialRampToValueAtTime(0.5,t+0.04);
+    out.gain.setValueAtTime(0.5,t+0.6);
+    out.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    const bp=ctx.createBiquadFilter(); bp.type='bandpass'; bp.Q.value=4;
+    bp.frequency.setValueAtTime(2600,t); bp.frequency.exponentialRampToValueAtTime(1500,t+dur);
+    bp.connect(out); out.connect(ctx.destination);
+    // two detuned voices for rasp
+    [0,18].forEach(det=>{
+      const o=ctx.createOscillator(); o.type='sawtooth'; o.detune.value=det;
+      o.frequency.setValueAtTime(2400,t);
+      o.frequency.exponentialRampToValueAtTime(2900,t+0.08);
+      o.frequency.exponentialRampToValueAtTime(1300,t+dur);
+      const lfo=ctx.createOscillator(), depth=ctx.createGain();
+      lfo.frequency.value=28; depth.gain.value=140;
+      lfo.connect(depth); depth.connect(o.frequency);
+      o.connect(bp); o.start(t); lfo.start(t); o.stop(t+dur); lfo.stop(t+dur);
+    });
+  }catch(e){}
 }
-const shade=i=>['#2a1609','#33190a','#3e2412','#2e170a'][i%4];
-document.querySelectorAll('.wing').forEach(g=>{
-  for(let i=0;i<10;i++){const t=i/9;feather(g,8+t*150,-6-t*80,80-t*38,112+t*10,22,'url(#flightG)','#7a4a24')}
-  for(let i=0;i<7;i++){const t=i/6;feather(g,150+t*18,-82-t*10,10-t*52,150-t*22,15,'url(#flightG)','#8a5a2e')}
-  el('path',{d:'M-6,10 C30,-30 90,-72 168,-98 C180,-92 180,-76 168,-66 C112,-40 62,-8 12,26 Z',fill:'#1e0f05'},g);
-  for(let i=0;i<9;i++){const t=i/8;feather(g,6+t*150,-4-t*78,72-t*30,62,22,shade(i),'#9a6634')}
-  for(let i=0;i<8;i++){const t=i/7;feather(g,4+t*140,-10-t*74,60-t*24,36,16,shade(i+1),'#b07a3e')}
+const eagle=document.getElementById('eagle');
+eagle.addEventListener('click',()=>{
+  screech();
+  eagle.classList.remove('go'); void eagle.offsetWidth; eagle.classList.add('go');
+  clearTimeout(eagle._t); eagle._t=setTimeout(()=>eagle.classList.remove('go'),1300);
 });
-const tail=document.getElementById('tail');
-for(let i=0;i<9;i++){const off=Math.abs(i-4);feather(tail,350,318,66+i*6,150-off*14,18,'url(#flightG)','#7a4a24')}
-const legs=document.getElementById('legs');
-[[332,-1],[368,1]].forEach(([x,dir])=>{
-  el('path',{d:`M${x-16},300 C${x-22},335 ${x-16},368 ${x-6},380 L${x+10},380 C${x+18},360 ${x+18},330 ${x+12},300 Z`,fill:'url(#trouserG)',stroke:'#2a1609','stroke-width':1.5},legs);
-  for(let k=0;k<4;k++){const a=(70+k*(18*dir))*Math.PI/180;const bx=x+2,by=380;const ex=bx+Math.cos(a)*(22-k*2)+(k-1.5)*7,ey=by+18+(k%2)*4;
-    el('path',{d:`M${bx},${by} L${ex},${ey}`,stroke:'#f2c94c','stroke-width':6,'stroke-linecap':'round'},legs);
-    el('path',{d:`M${ex-2},${ey} q4,10 -4,14`,stroke:'#0d0603','stroke-width':3.5,fill:'none','stroke-linecap':'round'},legs);}
-});
-const chest=document.getElementById('chest');
-for(let r=0;r<5;r++)for(let c=0;c<4-(r>2?1:0);c++){const x=322+c*18+(r%2)*9-(r>2?-9:0),y=208+r*24;
-  el('path',{d:`M${x-10},${y} q10,16 20,0`,fill:'none',stroke:'#8a5a2e','stroke-width':2,opacity:.55},chest);}
-function star(cx,cy,r,n,g){let d='';for(let i=0;i<n*2;i++){const rr=i%2?r*.45:r,a=Math.PI*i/n-Math.PI/2;d+=(i?'L':'M')+(cx+Math.cos(a)*rr)+','+(cy+Math.sin(a)*rr)}el('path',{d:d+'Z'},g)}
-const sg=document.getElementById('stars');
-star(120,318,15,7,sg);star(560,300,10,7,sg);star(600,276,9,7,sg);star(640,296,10,7,sg);star(602,328,11,7,sg);star(622,310,5,5,sg);
 
 const end=new Date('2026-11-09T19:00:00+08:00').getTime();
 const p=n=>String(n).padStart(2,'0');
