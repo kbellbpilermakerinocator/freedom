@@ -21,7 +21,7 @@ body{background:var(--sky-top);color:var(--ink);font-family:var(--body);overflow
   background:radial-gradient(ellipse at 50% 35%,var(--sky-mid) 0,var(--sky-top) 70%);text-align:center}
 
 /* Screeching eagle */
-.eagle{position:relative;width:min(440px,90vw);cursor:pointer;-webkit-tap-highlight-color:transparent;border:0;background:none;padding:0;color:inherit}
+.eagle{position:relative;width:min(440px,90vw)}
 .eagle svg{width:100%;height:auto;display:block;overflow:visible}
 #head{transform-box:view-box;transform-origin:120px 290px;animation:lunge 2.4s ease-in-out infinite}
 #jaw{transform-box:view-box;transform-origin:292px 168px;animation:jaw 2.4s ease-in-out infinite}
@@ -31,7 +31,6 @@ body{background:var(--sky-top);color:var(--ink);font-family:var(--body);overflow
 @keyframes lunge{0%,15%,100%{transform:rotate(0)}30%,60%{transform:rotate(-4deg) translateX(6px)}35%,45%,55%{transform:rotate(-3deg) translateX(4px)}40%,50%{transform:rotate(-5deg) translateX(7px)}}
 @keyframes jaw{0%,15%,80%,100%{transform:rotate(-14deg)}30%,62%{transform:rotate(14deg)}}
 @keyframes wave{0%,25%{opacity:0;transform:scale(.6)}35%{opacity:1}70%,100%{opacity:0;transform:scale(1.5)}}
-.hint{font-size:.95rem;letter-spacing:.25em;text-transform:uppercase;color:var(--dim);margin-top:-.4rem}
 
 h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;margin:0;letter-spacing:.02em;text-wrap:balance;
   color:var(--ink);text-shadow:0 4px 0 var(--orange),0 0 40px rgba(255,106,0,.5)}
@@ -46,7 +45,7 @@ h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;m
 </head>
 <body>
 <div class="sky">
-  <button class="eagle" id="eagle" type="button" aria-label="Wedge-tailed eagle screeching">
+  <div class="eagle" id="eagle" role="img" aria-label="Wedge-tailed eagle screeching">
     <svg viewBox="0 0 480 320" aria-hidden="true">
       <defs>
         <radialGradient id="glow"><stop offset="0" stop-color="#ffb35c"/><stop offset=".5" stop-color="#ff6a00" stop-opacity=".55"/><stop offset="1" stop-color="#ff6a00" stop-opacity="0"/></radialGradient>
@@ -103,8 +102,7 @@ h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;m
       </g>
 
     </svg>
-  </button>
-  <div class="hint" id="hint">Tap for the freedom screech</div>
+  </div>
 
   <h1>Month of Freedom</h1>
   <div class="clock" id="clock">
@@ -146,10 +144,10 @@ function voice(ctx,dest){
     param.exponentialRampToValueAtTime(2300*mul,1.9);
     param.exponentialRampToValueAtTime(1400*mul,dur);
   };
-  // light grain: a gentle, smooth flutter
-  const rasp=ctx.createGain(); rasp.gain.value=0.8;
-  [[83,0.1],[131,0.05]].forEach(([f,g])=>{
-    const l=ctx.createOscillator(), d=ctx.createGain(); l.type='sine';
+  // hoarse rasp: fast, slightly uneven amplitude flutter
+  const rasp=ctx.createGain(); rasp.gain.value=0.5;
+  [[83,0.32],[131,0.18]].forEach(([f,g])=>{
+    const l=ctx.createOscillator(), d=ctx.createGain(); l.type='square';
     l.frequency.setValueAtTime(f,0); l.frequency.linearRampToValueAtTime(f*0.7,dur);
     d.gain.value=g; l.connect(d); d.connect(rasp.gain); l.start(0); l.stop(dur);
   });
@@ -168,7 +166,7 @@ function voice(ctx,dest){
   const tg=ctx.createGain(); tg.gain.value=0.35; bp.connect(tg); tg.connect(rasp);
   [-30,0,28].forEach(det=>{
     const o=ctx.createOscillator(); o.type='sawtooth'; o.detune.value=det; glide(o.frequency,1);
-    const vib=ctx.createOscillator(), vd=ctx.createGain(); vib.frequency.value=37; vd.gain.value=45;
+    const vib=ctx.createOscillator(), vd=ctx.createGain(); vib.frequency.value=37; vd.gain.value=120;
     vib.connect(vd); vd.connect(o.frequency);
     o.connect(bp); o.start(0); vib.start(0); o.stop(dur); vib.stop(dur);
   });
@@ -198,17 +196,21 @@ const cry=new Audio(); cry.preload='auto';
 })();
 try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
 
-function screech(){ try{ cry.currentTime=0; const p=cry.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} }
-
-// Browsers only allow sound after a tap, so the first tap anywhere lets out one screech.
-let done=false;
-const hint=document.getElementById('hint');
+// One screech, 2 seconds after the page opens. Most phones block sound until the page
+// has been touched, so if it's blocked, it fires on the first tap instead.
+let done=false, armed=false;
 function once(){
   if(done) return;
-  done=true; hint.textContent='Freedom';
-  screech();
+  try{
+    cry.currentTime=0;
+    const p=cry.play();
+    if(p&&p.then) p.then(()=>{done=true},()=>{armed=true});
+    else done=true;
+  }catch(e){ armed=true; }
 }
-['click','touchend','keydown'].forEach(e=>addEventListener(e,once));
+function waitReady(fn){ cry.src ? fn() : setTimeout(()=>waitReady(fn),100); }
+setTimeout(()=>waitReady(once),2000);
+['click','touchend','keydown'].forEach(e=>addEventListener(e,()=>{ if(armed&&!done){ armed=false; once(); } }));
 
 const end=new Date('2026-11-09T19:00:00+08:00').getTime();
 const p=n=>String(n).padStart(2,'0');
