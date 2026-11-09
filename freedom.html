@@ -28,13 +28,9 @@ body{background:var(--sky-top);color:var(--ink);font-family:var(--body);overflow
 .wave{fill:none;stroke:var(--orange);stroke-width:7;stroke-linecap:round;opacity:0;transform-box:view-box;transform-origin:360px 170px;animation:wave 2.4s ease-out infinite}
 .wave:nth-of-type(2){animation-delay:.15s}
 .wave:nth-of-type(3){animation-delay:.3s}
-.skree{font-family:var(--display);fill:var(--ink);paint-order:stroke;stroke:var(--orange);stroke-width:6px;letter-spacing:2px;
-  transform-box:fill-box;transform-origin:center;animation:pop 2.4s ease-out infinite}
 @keyframes lunge{0%,15%,100%{transform:rotate(0)}30%,60%{transform:rotate(-4deg) translateX(6px)}35%,45%,55%{transform:rotate(-3deg) translateX(4px)}40%,50%{transform:rotate(-5deg) translateX(7px)}}
 @keyframes jaw{0%,15%,80%,100%{transform:rotate(-14deg)}30%,62%{transform:rotate(14deg)}}
 @keyframes wave{0%,25%{opacity:0;transform:scale(.6)}35%{opacity:1}70%,100%{opacity:0;transform:scale(1.5)}}
-@keyframes pop{0%,25%{opacity:0;transform:scale(.4) rotate(-6deg)}35%{opacity:1;transform:scale(1.1) rotate(-6deg)}62%{opacity:1;transform:scale(1) rotate(-4deg)}75%,100%{opacity:0;transform:scale(1) rotate(-4deg)}}
-.eagle.go #head,.eagle.go #jaw,.eagle.go .wave,.eagle.go .skree{animation-duration:1.2s;animation-iteration-count:1}
 .hint{font-size:.95rem;letter-spacing:.25em;text-transform:uppercase;color:var(--dim);margin-top:-.4rem}
 
 h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;margin:0;letter-spacing:.02em;text-wrap:balance;
@@ -45,12 +41,12 @@ h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;m
 .lbl{font-size:.9rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim)}
 .until{font-size:1.15rem;color:var(--dim)}
 .done .num{color:var(--ink)}
-@media (prefers-reduced-motion:reduce){#head,#jaw,.wave,.skree{animation:none}.skree{opacity:1}#jaw{transform:rotate(14deg)}}
+@media (prefers-reduced-motion:reduce){#head,#jaw,.wave{animation:none}#jaw{transform:rotate(14deg)}}
 </style>
 </head>
 <body>
 <div class="sky">
-  <button class="eagle" id="eagle" type="button" aria-label="Wedge-tailed eagle screeching. Tap to hear the freedom screech">
+  <button class="eagle" id="eagle" type="button" aria-label="Wedge-tailed eagle screeching">
     <svg viewBox="0 0 480 320" aria-hidden="true">
       <defs>
         <radialGradient id="glow"><stop offset="0" stop-color="#ffb35c"/><stop offset=".5" stop-color="#ff6a00" stop-opacity=".55"/><stop offset="1" stop-color="#ff6a00" stop-opacity="0"/></radialGradient>
@@ -106,10 +102,9 @@ h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;m
         <path fill="none" stroke="#140904" stroke-width="3" d="M240,148 q12,4 24,-2"/>
       </g>
 
-      <text class="skree" x="372" y="64" font-size="46" text-anchor="middle">SKREEE!</text>
     </svg>
   </button>
-  <div class="hint">Tap the eagle</div>
+  <div class="hint" id="hint">Tap anywhere to turn the screech on</div>
 
   <h1>Month of Freedom</h1>
   <div class="clock" id="clock">
@@ -149,11 +144,19 @@ function screech(){
     });
   }catch(e){}
 }
-const eagle=document.getElementById('eagle');
-eagle.addEventListener('click',()=>{
+// Phones and browsers block sound until the first tap, so the first touch anywhere
+// unlocks it; after that the eagle screeches out loud every time its beak snaps open.
+let soundOn=false;
+const hint=document.getElementById('hint');
+function unlock(){
+  if(soundOn) return;
+  soundOn=true; hint.textContent='Screech on';
   screech();
-  eagle.classList.remove('go'); void eagle.offsetWidth; eagle.classList.add('go');
-  clearTimeout(eagle._t); eagle._t=setTimeout(()=>eagle.classList.remove('go'),1300);
+}
+['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,unlock,{passive:true}));
+// The jaw opens 30% into each 2.4 s cycle; fire the cry on that beat.
+document.getElementById('jaw').addEventListener('animationiteration',()=>{
+  if(soundOn) setTimeout(screech,720);
 });
 
 const end=new Date('2026-11-09T19:00:00+08:00').getTime();
