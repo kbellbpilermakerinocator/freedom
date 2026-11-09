@@ -24,12 +24,12 @@ body{background:var(--sky-top);color:var(--ink);font-family:var(--body);overflow
 .eagle{position:relative;width:min(440px,90vw)}
 .eagle svg{width:100%;height:auto;display:block;overflow:visible}
 #head{transform-box:view-box;transform-origin:120px 290px;animation:lunge 2.4s ease-in-out infinite}
-#jaw{transform-box:view-box;transform-origin:292px 168px;animation:jaw 2.4s ease-in-out infinite}
-.wave{fill:none;stroke:var(--orange);stroke-width:7;stroke-linecap:round;opacity:0;transform-box:view-box;transform-origin:360px 170px;animation:wave 2.4s ease-out infinite}
+#jaw{transform-box:view-box;transform-origin:314px 164px;animation:jaw 2.4s ease-in-out infinite}
+.wave{fill:none;stroke:var(--orange);stroke-width:7;stroke-linecap:round;opacity:0;transform-box:view-box;transform-origin:384px 170px;animation:wave 2.4s ease-out infinite}
 .wave:nth-of-type(2){animation-delay:.15s}
 .wave:nth-of-type(3){animation-delay:.3s}
 @keyframes lunge{0%,15%,100%{transform:rotate(0)}30%,60%{transform:rotate(-4deg) translateX(6px)}35%,45%,55%{transform:rotate(-3deg) translateX(4px)}40%,50%{transform:rotate(-5deg) translateX(7px)}}
-@keyframes jaw{0%,15%,80%,100%{transform:rotate(-14deg)}30%,62%{transform:rotate(14deg)}}
+@keyframes jaw{0%,15%,80%,100%{transform:rotate(-4deg)}30%,62%{transform:rotate(16deg)}}
 @keyframes wave{0%,25%{opacity:0;transform:scale(.6)}35%{opacity:1}70%,100%{opacity:0;transform:scale(1.5)}}
 
 h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;margin:0;letter-spacing:.02em;text-wrap:balance;
@@ -48,59 +48,53 @@ h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;m
   <div class="eagle" id="eagle" role="img" aria-label="Wedge-tailed eagle screeching">
     <svg viewBox="0 0 480 320" aria-hidden="true">
       <defs>
-        <radialGradient id="glow"><stop offset="0" stop-color="#ffb35c"/><stop offset=".5" stop-color="#ff6a00" stop-opacity=".55"/><stop offset="1" stop-color="#ff6a00" stop-opacity="0"/></radialGradient>
-        <linearGradient id="plume" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a2a12"/><stop offset=".6" stop-color="#2a1608"/><stop offset="1" stop-color="#140904"/></linearGradient>
-        <linearGradient id="nape" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a4f1c"/><stop offset=".55" stop-color="#d89038"/><stop offset="1" stop-color="#f0b860"/></linearGradient>
-        <linearGradient id="beak" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3e6c8"/><stop offset=".7" stop-color="#cdbb94"/><stop offset="1" stop-color="#3a2a1a"/></linearGradient>
-        <filter id="rim"><feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#ff8a2a" flood-opacity=".7"/></filter>
+        <radialGradient id="glow"><stop offset="0" stop-color="#ffb35c"/><stop offset=".5" stop-color="#ff6a00" stop-opacity=".5"/><stop offset="1" stop-color="#ff6a00" stop-opacity="0"/></radialGradient>
+        <linearGradient id="neckG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9c5226"/><stop offset=".5" stop-color="#6a3416"/><stop offset="1" stop-color="#3a1c0a"/></linearGradient>
+        <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1e0c"/><stop offset="1" stop-color="#1a0d05"/></linearGradient>
+        <linearGradient id="beakG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1ece2"/><stop offset=".55" stop-color="#c9c6c2"/><stop offset=".85" stop-color="#7c8189"/><stop offset="1" stop-color="#3a3e44"/></linearGradient>
+        <radialGradient id="irisG" cx=".4" cy=".4"><stop offset="0" stop-color="#d9a24a"/><stop offset=".7" stop-color="#9a6a22"/><stop offset="1" stop-color="#4a3010"/></radialGradient>
+        <filter id="rim"><feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#ff8a2a" flood-opacity=".6"/></filter>
       </defs>
-      <circle cx="190" cy="170" r="170" fill="url(#glow)"/>
+      <circle cx="200" cy="170" r="170" fill="url(#glow)"/>
 
       <!-- sound waves -->
-      <path class="wave" d="M372,128 q22,42 0,84"/>
-      <path class="wave" d="M396,108 q34,62 0,124"/>
-      <path class="wave" d="M420,88 q46,82 0,164"/>
+      <path class="wave" d="M394,132 q22,42 0,84"/>
+      <path class="wave" d="M418,112 q34,62 0,124"/>
+      <path class="wave" d="M442,92 q46,82 0,164"/>
 
       <g id="head" filter="url(#rim)">
-        <!-- neck and head mass with bristling hackles -->
-        <path fill="url(#plume)" d="M40,320 C34,262 50,206 86,164 L72,150 L98,148 L90,128 L114,134 L114,110 L136,122 L144,98 L160,114 L176,92 L186,110 C214,88 256,86 282,104 C296,114 304,128 306,146 L296,170 C292,196 280,214 262,226 C250,262 246,292 250,320 Z"/>
-        <!-- golden nape -->
-        <path fill="url(#nape)" d="M118,128 L136,122 L144,98 L160,114 L176,92 L186,110 C214,92 248,90 270,104 C244,104 218,114 196,132 C178,146 166,166 160,188 C148,168 134,148 118,128 Z"/>
-        <g fill="none" stroke="#f6c870" stroke-width="2.5" stroke-linecap="round" opacity=".75">
-          <path d="M170,118 q24,-8 44,-6"/><path d="M160,136 q26,-12 50,-10"/><path d="M156,156 q20,-14 40,-16"/>
-        </g>
-        <!-- chest feather scallops -->
-        <g fill="none" stroke="#6a3e1c" stroke-width="2.5" opacity=".7">
-          <path d="M120,250 q12,14 24,0"/><path d="M150,262 q12,14 24,0"/><path d="M180,250 q12,14 24,0"/>
-          <path d="M106,280 q12,14 24,0"/><path d="M136,292 q12,14 24,0"/><path d="M166,282 q12,14 24,0"/><path d="M196,272 q12,14 24,0"/>
-        </g>
-
-        <!-- open mouth interior -->
-        <path fill="#5a0e0e" d="M292,150 C316,150 340,156 360,166 L356,186 C334,196 310,196 292,186 Z"/>
-        <path fill="#c43a3a" d="M300,170 C318,170 334,174 346,180 C334,188 314,188 302,182 Z"/>
-
-        <!-- lower mandible, hinged so it drops open -->
+        <!-- dark shoulders -->
+        <path fill="url(#bodyG)" d="M0,320 C14,268 52,236 104,222 L262,222 C292,240 312,276 318,320 Z"/>
+        <g id="scallops"></g>
+        <!-- neck and head mass -->
+        <path fill="url(#neckG)" d="M86,246 C74,200 96,146 146,110 C186,82 246,72 292,90 C316,100 330,118 332,138 L326,162 C316,194 292,220 260,238 C200,256 130,262 86,246 Z"/>
+        <g id="hackles"></g>
+        <!-- darker crown -->
+        <path fill="#2a1408" opacity=".85" d="M178,96 C214,78 262,74 296,90 C312,98 322,108 326,120 C300,104 262,96 226,102 C206,106 190,104 178,96 Z"/>
+        <!-- pale cheek and gape skin -->
+        <path fill="#c9b9a0" d="M276,148 C292,142 310,146 322,156 C310,166 294,168 280,160 Z"/>
+        <!-- mouth interior -->
+        <path fill="#b9606a" d="M318,150 C340,148 358,152 372,160 L368,178 C348,186 330,182 316,170 Z"/>
+        <path fill="#e39aa2" d="M324,162 C340,162 354,166 362,172 C350,178 334,176 324,170 Z"/>
+        <!-- lower mandible -->
         <g id="jaw">
-          <path fill="url(#beak)" d="M290,166 C314,172 338,180 356,182 C356,192 346,200 330,200 C310,200 294,192 286,180 Z"/>
-          <path fill="none" stroke="#7a6446" stroke-width="2" d="M292,172 C312,178 332,184 350,186"/>
+          <path fill="#d6d0c6" d="M314,160 C336,166 356,174 372,178 C370,186 360,192 344,190 C328,188 316,180 310,170 Z"/>
+          <path fill="none" stroke="#9a948a" stroke-width="1.5" d="M318,166 C336,172 352,178 366,181"/>
         </g>
-
-        <!-- upper mandible with hooked tip -->
-        <path fill="url(#beak)" d="M282,124 C312,114 346,120 366,142 C376,154 376,172 362,182 C364,170 358,160 346,156 C328,150 306,150 288,156 Z"/>
-        <path fill="#1c120a" d="M362,182 C374,172 376,154 366,142 C372,156 372,170 362,182 Z"/>
-        <path fill="none" stroke="#9a8460" stroke-width="2" d="M292,150 C312,146 334,148 350,156"/>
-        <!-- cere and nostril -->
-        <path fill="#e8d6a0" d="M278,120 C290,116 302,118 308,126 C300,136 292,148 286,160 C280,148 278,134 278,120 Z"/>
-        <ellipse cx="296" cy="130" rx="5" ry="3" fill="#2a1a0c" transform="rotate(-20 296 130)"/>
-
-        <!-- fierce eye with heavy brow -->
-        <circle cx="252" cy="134" r="13" fill="#d9921f"/>
-        <circle cx="255" cy="134" r="7" fill="#0d0603"/>
-        <circle cx="258" cy="130" r="2.6" fill="#fff3e6"/>
-        <path fill="#140904" d="M222,124 C238,108 266,108 286,120 C268,118 252,120 238,132 C232,128 226,126 222,124 Z"/>
-        <path fill="none" stroke="#140904" stroke-width="3" d="M240,148 q12,4 24,-2"/>
+        <!-- cere -->
+        <path fill="#efe6d2" d="M300,108 C316,100 334,104 342,114 C334,128 326,142 318,154 C306,140 300,124 300,108 Z"/>
+        <ellipse cx="322" cy="118" rx="5" ry="3" fill="#2a1e14" transform="rotate(-18 322 118)"/>
+        <!-- upper mandible with deep hook -->
+        <path fill="url(#beakG)" d="M330,108 C356,102 382,112 394,136 C402,154 398,174 384,182 C386,168 380,158 368,154 C352,150 334,150 318,154 C324,138 328,122 330,108 Z"/>
+        <path fill="#2e3238" d="M384,182 C398,174 402,154 394,136 C398,154 396,170 384,182 Z"/>
+        <path fill="none" stroke="#8a8a8a" stroke-width="1.5" d="M322,150 C342,146 362,148 376,156"/>
+        <!-- eye: amber-brown under a heavy brow -->
+        <circle cx="282" cy="122" r="11" fill="url(#irisG)"/>
+        <circle cx="284" cy="122" r="5" fill="#0d0603"/>
+        <circle cx="287" cy="118" r="2.2" fill="#fff6e8"/>
+        <path fill="none" stroke="#4a3020" stroke-width="2" d="M270,124 C276,134 290,135 296,126"/>
+        <path fill="#140904" d="M256,112 C270,98 298,96 316,108 C298,106 284,108 270,120 C264,116 260,114 256,112 Z"/>
       </g>
-
     </svg>
   </div>
 
@@ -113,6 +107,49 @@ h1{font-family:var(--display);font-size:clamp(3rem,13vw,8.5rem);line-height:.9;m
   </div>
   <div class="until" id="until">Freedom starts tonight at 7:00 pm Perth time</div>
 </div>
+<script>
+// Shaggy hackles and scalloped shoulder feathers, drawn once with a fixed seed.
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  let seed=7; const r=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e};
+  const spike=(g,x,y,ang,len,w,fill)=>{
+    const c=Math.cos(ang),s=Math.sin(ang),tx=x+c*len,ty=y+s*len,px=-s*w,py=c*w;
+    el('path',{d:`M${x+px},${y+py} Q${x+c*len*.55+px*.4},${y+s*len*.55+py*.4} ${tx},${ty} Q${x+c*len*.55-px*.4},${y+s*len*.55-py*.4} ${x-px},${y-py}Z`,fill},g);
+  };
+  const hk=document.getElementById('hackles');
+  const cols=['#5a2c10','#7a3c18','#9c5226','#b8662e','#c97a3a','#6a3414'];
+  // back of the neck, from the shoulders up over the crown: spikes flare back and up
+  for(let i=0;i<70;i++){
+    const t=i/69, u=1-t;
+    const x=u*u*90+2*u*t*84+t*t*196, y=u*u*246+2*u*t*130+t*t*88;
+    const ang=Math.PI*(1.05+0.25*t)+ (r()-.5)*0.5;
+    spike(hk,x+(r()-.5)*10,y+(r()-.5)*10,ang,22+r()*26,4+r()*3,cols[(r()*cols.length)|0]);
+  }
+  // loose strands over the neck surface
+  const soft=['#7a3c18','#8a4620','#6a3416','#a0582a'];
+  for(let i=0;i<120;i++){
+    const x=105+r()*170, y=110+r()*135;
+    if(x+y*0.6>370 || (x>250&&y<150)) continue;
+    spike(hk,x,y,Math.PI*(0.72+r()*0.12),18+r()*20,1.6+r()*1.4,soft[(r()*soft.length)|0]);
+  }
+  // throat feathers hanging down at the front
+  for(let i=0;i<22;i++){
+    const t=i/21, x=240+t*70-(r()*8), y=236-t*70+(r()*8);
+    spike(hk,x,y,Math.PI*(0.35+r()*0.2),16+r()*14,4,cols[(r()*3)|0]);
+  }
+  // scalloped shoulder feathers with tan tips
+  const sc=document.getElementById('scallops');
+  for(let y=236;y<330;y+=13){
+    const xmin=Math.max(8,104-(y-222)*0.95), xmax=Math.min(312,262+(y-222)*0.55);
+    for(let x=xmin+((y/13)%2)*9;x<xmax;x+=18){
+      const jx=x+(r()-.5)*4, jy=y+(r()-.5)*3;
+      el('path',{d:`M${jx-9},${jy-6} Q${jx},${jy+12} ${jx+9},${jy-6} Z`,fill:r()>.5?'#2a1408':'#331a0a'},sc);
+      el('path',{d:`M${jx-8},${jy-2} Q${jx},${jy+10} ${jx+8},${jy-2}`,fill:'none',stroke:r()>.4?'#7a5028':'#9a6a3a','stroke-width':1.8,opacity:.6},sc);
+    }
+  }
+})();
+</script>
 <script>
 // Raptor screech, rendered once into a real WAV clip and played through an <audio>
 // element. That plays on iPhones (even with the silent switch on) and Android alike.
